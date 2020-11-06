@@ -39,6 +39,12 @@ $routes->post("/login","Admin::login");
 $routes->get("/quanlybaiviet","Admin::quanlybaiviet");
 $routes->get("/quanlychude","Admin::quanlychude");
 $routes->post("/quanlychude","Admin::quanlychude");
+$routes->get("/quanlybaiviet","Admin::quanlybaiviet");
+$routes->post("/quanlybaiviet","Admin::quanlybaiviet");
+$routes->post("/xemthem","Home::xemthem");
+$routes->add("/baiviet/(:any)","Home::xembaiviet/$1");
+$routes->add("/chude/(:any)","Home::chude/$1");
+$routes->add("/chude/(:any)/(:any)","Home::chude/$1/$2");
 //$routes->group('admin', function($routes)
 //{
 //

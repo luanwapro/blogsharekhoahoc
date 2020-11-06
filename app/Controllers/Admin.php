@@ -110,10 +110,42 @@ class Admin extends BaseController{
     }
 
      public function quanlybaiviet(){
+        ini_set('display_errors', 1);
+        $request = service("request");
+    
+  
+       
 
-        $baiviet = (new DB())->table("baiviet");
+     
+        if($request->getMethod()=="post"){
+            
+            
+            if($request->getPost("linkbaiviet")!=null){
+              
+            $thembaiviet =(new DB())->table("khoahoc");
+            $anh = $request->getFile("anhbaiviet");
+            if($anh->isValid() && !$anh->hasMoved()){
+                $anh->move("./uploads/images");
 
-        return view('admin/adminquanlybaiviet',['headerAdmin'=>view('admin/adminHeader')]);
+                $filename="uploads/images/".$anh->getName();
+                $date=date('Y/m/d H:i:s');
+                $thembaiviet->insert("'','{$request->getPost("chude")}','{$request->getPost("tenkhoahoc")}','{$request->getPost("linkcmt")}','{$request->getPost("linkbaiviet")}', '{$request->getPost("themnoidung")}','{$filename}',' $date','0'");
+            }
+       
+    
+          
+        }else if($request->getPost("idchudecanxoa")!=null){
+
+            (new DB())->table("khoahoc")->delete("id=".$request->getPost("idchudecanxoa"));
+           
+        }
+
+        }
+        $danhsachchude =(new DB())->table("chude")->get();
+        $baiviet = (new DB())->table("khoahoc")->get();
+
+    
+      return view('admin/adminquanlybaiviet',['baiviet'=>$baiviet,'danhsachchude1'=>$danhsachchude]);
      }
 
     public function quanlychude(){
@@ -127,9 +159,10 @@ class Admin extends BaseController{
                 $capchude =(int)$request->getPost("capchude");
 
                 if($request->getPost("chudecha")!=null) {
-                   $chude->insert("'','{$request->getPost("chude")}','{$capchude}',{$request->getPost("chudecha")}");
+                   $chude->insert("'','{$request->getPost("chude")}','{$capchude}','{$request->getPost("chudecha")}'");
+               
                 }else{
-                    $chude->insert("'','{$request->getPost("chude")}',{$capchude},0");
+                    $chude->insert("'','{$request->getPost("chude")}','{$capchude}',0");
                 }
 
                 return  redirect()->to("/quanlychude");
@@ -137,30 +170,26 @@ class Admin extends BaseController{
             if($request->getPost("idchudecanxoa")!=null){
 
                 $chude->delete("id=".$request->getPost("idchudecanxoa"));
-                echo $request->getPost("idchudecanxoa");
+               
             }
             if($request->getPost("chudecantim")!=null){
 
                 $ds=$chude->where("tenchude like %".$request->getPost("chudecantim")."%")->get();
                 foreach ($ds as $value){
                     if($value->cap==1)
-                        echo "<option>".$value->tenchude."-".$value->id."</option>";
+                        echo "<option value='".$value->id."'>".$value->tenchude."-".$value->id."</option>";
                 }
             }
 
         }else{
 
-            $ds=$chude->where("tenchude like %"."php"."%")->get();
-            foreach ($ds as $value){
-                if($value->cap==1)
-                    echo "<option>".$value->tenchude."-".$value->id."</option>";
-
-            }
+        
             $danhsachchude=$chude->get();
 
             return view('admin/adminquanlychude',['chude'=>$danhsachchude]);
         }
 
     }
+
 
 }

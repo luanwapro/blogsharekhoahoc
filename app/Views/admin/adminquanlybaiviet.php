@@ -10,28 +10,61 @@
         <div class="modal-content">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Thêm Chủ Đề</h3>
+                    <h3 class="card-title">Thêm Bài Viết</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" method="post">
+                <form role="form" method="post" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Tên Chủ Đề</label>
-                            <input type="text" class="form-control" name="chude" id="chude" placeholder="quan ly chu de">
+                            <label for="exampleInputEmail1">Tên Khóa Học</label>
+                            <input type="text" class="form-control" name="tenkhoahoc"  placeholder="PHP">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Cấp Bậc Chủ Đề</label>
-                            <select class="custom-select" name="capchude" id="capchude">
-                                <option value="1">Cấp  1</option>
-                                <option value="2" selected>Cấp 2</option>
+                            <label for="exampleInputPassword1">Chủ Đề</label>
+                        
+                            <select class="custom-select" name="chude" >
+                            
+                                <?php foreach($danhsachchude1 as $valueds)   :?>
+                                   <?php if($valueds->cap!=1) :?>
+                                <option value="<?=$valueds->id  ?>"><?= $valueds->tenchude ?></option>
+                                <?php endif ;?>
+                                <?php endforeach ;?>
                             </select>
                         </div>
-                        <div class="form-group" id="select2_chudecha">
+                        <label for="exampleInputPassword1">Ảnh Bài Viết</label>
+                        <div class="form-group">
 
-                            <select id="chudecha"  name="chudecha" class="form-control ui-autocomplete-input select2-single select2-hidden-accessible custom-select" tabindex="-1" aria-hidden="true" style="width: 100%;height:20%">
+                        <div class="input-group">
+                      
+                     
+                      <div class="custom-file">
+                    
+                        <input type="file" class="custom-file-input" name="anhbaiviet" id="exampleInputFile">
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      </div>
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="">Upload</span>
+                      </div>
+                       </div>
 
-                            </select>
+
+                        </div>
+                        <div class="form-group">
+
+                            <textarea id="themnoidung" name="themnoidung"></textarea>
+
+
+                            </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Link cmt</label>
+                            <input type="text" class="form-control" name="linkcmt"  placeholder="link cmt">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Link Bai Viet</label>
+                            <input type="text" class="form-control" name="linkbaiviet"  placeholder="Link bai viet">
                         </div>
 
                         <script>
@@ -68,7 +101,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Thêm Chủ Đề</button>
+                        <button type="submit" name="thembaiviet" class="btn btn-primary">Thêm Bài Viết</button>
                     </div>
                 </form>
             </div>
@@ -105,7 +138,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Quản Lý Chủ Đề</h3>
+                        <h3 class="card-title">Quản Lý Bài Viết</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -114,20 +147,60 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Tên Chủ Đề</th>
-                                <th>FK Chủ Đề </th>
-                                <th>Cấp Độ</th>
+                                <th>Tên Khóa Học </th>
+                                <th>CMT</th>
+                                <th>Link</th>
+                                <th>Nội Dung</th>
+                                <th>Edit</th>
 
                             </tr>
                             </thead>
                             <tbody>
 
                             <tr>
-                                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Thêm Chủ Đề</button></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Thêm Bài Viết</button></td>
                             </tr>
-                            </tbody>
-                            <tfoot>
+                           
+                    
+                            <?php foreach($baiviet as $value) :?>
+                                <tr>
+                                <td><?= $value->id ?></td>
+                           
+                                <?php foreach($danhsachchude1 as $danhsachchude) :?>
+                            <?php  if($danhsachchude->id==$value->id_chude)  :?>
 
-                            </tfoot>
+                            <td><?= $danhsachchude->tenchude ?></td>
+
+                            <?php   endif  ;?>
+                            <?php  endforeach  ;?>
+
+
+                            
+                            <td><?= $value->tenkhoahoc ?>
+                        
+                            <img src="<?= $value->anh ?>" width="200px" height="150px">
+                                 </td>
+                            <td><?= $value->cmt ?></td>
+                            <td><?= $value->link ?></td>
+                            <td><?= $value->noidung ?></td>
+                            <td>
+
+
+                            <button type="button" class="btn  btn-danger" onclick="xoachude(idchude=<?=  $value->id  ?>)" data-toggle="" data-target=".bd-example-modal-lg">Xóa Chủ Đề</button>
+                            </td>
+                           
+                            </tr>
+                            <?php endforeach   ;?>
+                      
+
+                            </tbody>
+                      
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -140,4 +213,34 @@
     </section>
     <!-- /.content -->
 </div>
+<script src="<?php echo base_url() ?>/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace( 'themnoidung' );
+</script>
+
+<script>
+
+    function xoachude(){
+
+        Swal.fire({
+            title: 'Bạn có chắc xóa chủ đề hay không?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Delete`,
+
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire('Delete!', '', 'success');
+                $.post('',{'idchudecanxoa':idchude},function (data){
+                 
+                    location.href="";
+                });
+            }
+        })
+
+    }
+
+
+</script>
 <?= $this->endSection() ?>

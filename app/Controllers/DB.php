@@ -26,12 +26,14 @@ class DB extends Controller
     }
     function insert($data,$column=null,$where=null){
 
-        if($column!=null){
+        if($column==null){
 
-          self::$conn->query("insert into ".self::$nametb." ".$column." values(".$data." )");
+          self::$conn->query("insert into ".self::$nametb." "." values(".$data." )");
 
 
+   
         }else{
+            
             self::$conn->query("insert into ".self::$nametb."(".$column.")"." values( ".$data." )");
 
         }
@@ -59,18 +61,20 @@ class DB extends Controller
     }
 
     function where($where){
-        if(self::$db=="mysql") {
+       
             if (self::$table != "") {
                 if (substr_count(self::$table, "where") > 0) {
                     self::$table .= " and " . $where;
                 } else {
                     self::$table .= " where " . $where;
                 }
+                 
 
             } else {
                 echo "error: not found table";
             }
-        }
+        
+    
         return new static();
     }
     function orwhere($where){
@@ -136,6 +140,9 @@ class DB extends Controller
                 echo $exception;
             }
 
+        }
+        function dbAll(){
+            return    self::$conn->table(self::$nametb);
         }
 
 
